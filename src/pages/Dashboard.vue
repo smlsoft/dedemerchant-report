@@ -8,7 +8,7 @@ const storeApp = useApp();
 
 onMounted(() => {
   storeApp.setActivePage("dashboard");
-  storeApp.setActiveChild('');
+  storeApp.setActiveChild("");
   storeApp.setPageTitle("แดรชบอร์ด");
 });
 </script>

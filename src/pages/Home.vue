@@ -6,7 +6,7 @@ import MainContentWarp from "@/components/MainContentWarp.vue";
 <template>
   <AppLayout>
     <MainContentWarp>
-    <div>Home</div>
+      <div>Home</div>
     </MainContentWarp>
   </AppLayout>
 </template>
