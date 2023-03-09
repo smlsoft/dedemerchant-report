@@ -7,7 +7,6 @@ import vue from "@vitejs/plugin-vue";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-
   plugins: [
     vue(),
     EnvironmentPlugin({
@@ -20,19 +19,19 @@ export default defineConfig({
       // Required: will fail if the API_KEY environment variable is not provided.
       VUE_APP_API: undefined,
 
-      // Optional: will not fail if the APP_VERSION environment variable is missing.
+      VUE_APP_REPORT_API_URL: undefined, // Optional: will not fail if the APP_VERSION environment variable is missing.
       APP_VERSION: null,
     }),
   ],
   test: {
     globals: true,
-    environment: 'jsdom',
+    environment: "jsdom",
   },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
-      vue: 'vue/dist/vue.esm-bundler.js',
+      vue: "vue/dist/vue.esm-bundler.js",
     },
   },
-  base: '/app/'
+  base: "/app/",
 });

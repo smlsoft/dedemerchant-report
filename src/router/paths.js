@@ -24,6 +24,11 @@ export default [
     component: () => import("../pages/inventory/balance.vue"),
   },
   {
+    path: "/sale/salereport",
+    name: "salereport",
+    component: () => import("../pages/sale/salereport.vue"),
+  },
+  {
     path: "/login",
     name: "login",
     meta: {
@@ -49,6 +54,5 @@ export default [
     path: "/health-check",
     name: "health-check",
     component: () => import("../pages/HealthCheck.vue"),
-  }
-
+  },
 ];

@@ -1,10 +1,19 @@
-import { instanceApi } from '@/services/ProviderService'
+import { instanceApireport } from "@/services/ProviderService";
 
 export default {
-    getBalanceReport() {
-        return instanceApi(true).get(`/getBalanceReport`).then(res => res.data);
-    },
-    sendEmailPDF(email){
-        return instanceApi(true).post(`/messages?email=${email}`).then(res => res.data);
-    }
-}
+  getBalanceReport() {
+    return instanceApireport()
+      .get(`/api/balance`)
+      .then((res) => res.data);
+  },
+  getSaleReport(fromdate, todate) {
+    return instanceApireport()
+      .get(`/api/sale?fromdate=${fromdate}&todate=${todate}`)
+      .then((res) => res.data);
+  },
+  sendEmailPDF(email) {
+    return instanceApireport()
+      .post(`/sendPDFEmail`, email)
+      .then((res) => res.data);
+  },
+};

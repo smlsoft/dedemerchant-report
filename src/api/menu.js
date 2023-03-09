@@ -13,5 +13,11 @@ export const menus = [
     name: "balance",
     children: [],
   },
-  
+  {
+    title: "รายงานขาย",
+    icon: "pi pi-file",
+    to: "/sale/salereport",
+    name: "salereport",
+    children: [],
+  },
 ];

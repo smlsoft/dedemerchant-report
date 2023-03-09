@@ -12,6 +12,7 @@ import { useLang } from "@/stores/lang.js";
 import { useRouter } from "vue-router";
 import pdfMake from "pdfmake/build/pdfmake.js";
 import pdfFonts from "pdfmake/build/vfs_fonts.js";
+import Calendar from "primevue/calendar";
 import Chart from "primevue/chart";
 import $ from "jquery";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -19,8 +20,11 @@ const isvisible = ref(false);
 const showdia = ref(false);
 const router = useRouter();
 const code_detail = ref("");
+// const fromdate = ref("");
+// const todate = ref("");
 const storeApp = useApp();
 const storeLang = useLang();
+const date1 = ref();
 const toast = useToast();
 const email = ref("");
 const products = ref(null);
@@ -78,11 +82,11 @@ statuses: [
 ];
 
 onMounted(() => {
-  storeApp.setPageTitle("รายงานสินค้าคงเหลือ");
-  storeApp.setActivePage("balance");
+  storeApp.setPageTitle("รายงานขาย");
+  storeApp.setActivePage("salereport");
   storeApp.setActiveChild("");
   checkActiveLang();
-  getBalanceReport();
+  // getBalanceReport();
 });
 
 function createPDFData(products) {
@@ -184,9 +188,25 @@ function generatePDF() {
     iframe.src = dataUrl;
   });
 }
+function getDateFromYear(date) {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1),
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+}
 
 function getBalanceReport() {
-  ReportService.getBalanceReport()
+  // let fromdate = getDateFromYear(fromdate);
+  // let todate = getDateFromYear(todate);
+  ReportService.getSaleReport(
+    (fromdate = "2022-01-02"),
+    (todate = "2022-01-02")
+  )
     .then((res) => {
       console.log(res);
       if (res.success) {
@@ -298,7 +318,33 @@ function goTo(path, param) {
     <MainContentWarp id="mainDiv">
       <div class="grid mt-2">
         <div class="col-12">
+          <label for="startDate" class="font-medium text-900"
+            >Input Email :</label
+          >
           <InputText type="text" v-model="email" />
+
+          <div class="fieldcol-6 md:col-3 ml-4">
+            <label for="startDate" class="font-medium text-900"
+              >ช่วงระหว่างวันที่ :</label
+            >
+            <Calendar
+              inputId="basic"
+              v-model="fromdate"
+              autocomplete="off"
+              dateFormat="yy-mm-dd"
+            />
+            <label for="endDate" class="font-medium text-900 ml-6"
+              >ถึงวันที่ :</label
+            >
+            <Calendar
+              inputId="basic"
+              v-model="todate"
+              autocomplete="off"
+              dateFormat="yy-mm-dd"
+            />
+          </div>
+          <Button icon="pi pi-file" label=" graph" @click="getBalanceReport" />
+
           <Card>
             <template #title>
               {{ storeApp.PageTitle }}
@@ -326,7 +372,7 @@ function goTo(path, param) {
                       label="Preview PDF"
                       @click="generatePDF"
                     />
-                    <Button icon="pi pi-file" label=" graph" @click="push" />
+
                     <span class="p-input-icon-left">
                       <i class="pi pi-search" />
                       <InputText
