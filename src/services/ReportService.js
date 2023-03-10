@@ -1,4 +1,4 @@
-import { instanceApireport } from "@/services/ProviderService";
+import { instanceApireport, instanceApi } from "@/services/ProviderService";
 
 export default {
   getBalanceReport() {
@@ -14,6 +14,11 @@ export default {
   sendEmailPDF(email) {
     return instanceApireport()
       .post(`/sendPDFEmail`, email)
+      .then((res) => res.data);
+  },
+  getproductreport() {
+    return instanceApi()
+      .get(`/product`)
       .then((res) => res.data);
   },
 };

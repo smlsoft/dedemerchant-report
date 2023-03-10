@@ -29,6 +29,11 @@ export default [
     component: () => import("../pages/sale/salereport.vue"),
   },
   {
+    path: "/sale/product",
+    name: "product",
+    component: () => import("../pages/sale/product.vue"),
+  },
+  {
     path: "/login",
     name: "login",
     meta: {
