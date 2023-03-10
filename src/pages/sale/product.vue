@@ -322,15 +322,7 @@ function goTo(path, param) {
     <MainContentWarp id="mainDiv">
       <div class="grid mt-2">
         <div class="col-12">
-          <label for="startDate" class="font-medium text-900"
-            >Input Email :</label
-          >
-          <InputText type="text" v-model="email" />
-
           <div class="fieldcol-6 md:col-3 ml-4">
-            <label for="startDate" class="font-medium text-900"
-              >ช่วงระหว่างวันที่ :</label
-            >
             <!-- <Calendar
               inputId="basic"
               v-model="Fromdate"
@@ -361,16 +353,16 @@ function goTo(path, param) {
               <DataTable
                 :value="products"
                 :paginator="true"
-                class="p-datatable-products"
+                class="p-datatable-sm"
                 :rows="25"
                 :rowHover="true"
                 v-model:filters="filters"
                 filterDisplay="menu"
                 :loading="loading"
-                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
-                :rowsPerPageOptions="[10, 25, 50]"
-                currentPageReportTemplate="จาก {first} ถึง {last} ทั้งหมด {totalRecords} รายการ"
                 responsiveLayout="scroll"
+                paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
+                :rowsPerPageOptions="[10, 20, 50]"
+                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
               >
                 <template #header>
                   <div class="flex justify-content-between align-items-center">

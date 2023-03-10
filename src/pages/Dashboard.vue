@@ -5,8 +5,13 @@ import { onMounted, ref } from "vue";
 import { useApp } from "@/stores/app.js";
 import ReportService from "@/services/ReportService";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
+import Chart from "primevue/chart";
 const storeApp = useApp();
-
+const charCusttData = ref(null);
+const chartItemData = ref(null);
+const chartWhshelfData = ref(null);
+const chartWhData = ref(null);
+const chartDoctyp = ref(null);
 const chartItem = ref();
 const chartCust = ref();
 const chartWhshelf = ref();
@@ -80,7 +85,114 @@ async function getDashboard() {
   chartDoctype.value = await getSaleReport("doctype");
   loadingDoc.value = false;
 }
-
+function pushchartCust() {
+  const data = chartCust.value;
+  const labels = data.map((item) => item.custcode);
+  const values = data.map((item) => item.sumamount);
+  charCusttData.value = {
+    labels,
+    datasets: [
+      {
+        label: "CustCode",
+        data: values,
+        backgroundColor: [
+          "#42A5F5",
+          "#66BB6A",
+          "#FFA726",
+          "#26C6DA",
+          "#7E57C2",
+          "#78909C",
+        ],
+      },
+    ],
+  };
+  // products.value.forEach((element) => {
+  //   // chartData.datasets[0].data = element.qty_in;
+  // });
+  // chartData.datasets[0].data.push([10, 20, 30, 40]);
+  // console.log(chartData.datasets[0].data);
+}
+function pushchartWhData() {
+  const data = chartWh.value;
+  const labels = data.map((item) => item.whcode);
+  const values = data.map((item) => item.sumamount);
+  chartWhData.value = {
+    labels,
+    datasets: [
+      {
+        label: "werehose",
+        data: values,
+        backgroundColor: [
+          "#42A5F5",
+          "#66BB6A",
+          "#FFA726",
+          "#26C6DA",
+          "#7E57C2",
+          "#78909C",
+        ],
+      },
+    ],
+  };
+  // products.value.forEach((element) => {
+  //   // chartData.datasets[0].data = element.qty_in;
+  // });
+  // chartData.datasets[0].data.push([10, 20, 30, 40]);
+  // console.log(chartData.datasets[0].data);
+}
+function pushchartWhshelfData() {
+  const data = chartWhshelf.value;
+  const labels = data.map((item) => item.shelfcode);
+  const values = data.map((item) => item.sumamount);
+  charCusttData.value = {
+    labels,
+    datasets: [
+      {
+        label: "werehose",
+        data: values,
+        backgroundColor: [
+          "#42A5F5",
+          "#66BB6A",
+          "#FFA726",
+          "#26C6DA",
+          "#7E57C2",
+          "#78909C",
+        ],
+      },
+    ],
+  };
+  // products.value.forEach((element) => {
+  //   // chartData.datasets[0].data = element.qty_in;
+  // });
+  // chartData.datasets[0].data.push([10, 20, 30, 40]);
+  // console.log(chartData.datasets[0].data);
+}
+function pushDocType() {
+  const data = chartDoctype.value;
+  const labels = data.map((item) => item.doctype);
+  const values = data.map((item) => item.sumamount);
+  charCusttData.value = {
+    labels,
+    datasets: [
+      {
+        label: "werehose",
+        data: values,
+        backgroundColor: [
+          "#42A5F5",
+          "#66BB6A",
+          "#FFA726",
+          "#26C6DA",
+          "#7E57C2",
+          "#78909C",
+        ],
+      },
+    ],
+  };
+  // products.value.forEach((element) => {
+  //   // chartData.datasets[0].data = element.qty_in;
+  // });
+  // chartData.datasets[0].data.push([10, 20, 30, 40]);
+  // console.log(chartData.datasets[0].data);
+}
 async function getSaleReport(mode) {
   var result = [];
   await ReportService.getSaleReportMode(
@@ -190,6 +302,40 @@ async function getSaleReport(mode) {
           @click="getDashboard()"
         />
       </div>
+      <div>
+        <Chart
+          type="bar"
+          :data="charCusttData"
+          :options="chartOptions"
+          class="h-30rem"
+        />
+      </div>
+      <div>
+        <Chart
+          type="bar"
+          :data="chartWhData"
+          :options="chartOptions"
+          class="h-30rem"
+        />
+      </div>
+      <div>
+        <Chart
+          type="bar"
+          :data="chartDoctype"
+          :options="chartOptions"
+          class="h-30rem"
+        />
+      </div>
+
+      <div>
+        <Chart
+          type="bar"
+          :data="chartWhshelfData"
+          :options="chartOptions"
+          class="h-30rem"
+        />
+      </div>
+      <!-- <Chart type="bar" :data="chartWhData" :options="chartOptions" /> -->
       <div class="flex">
         <div class="card flex-1 justify-content-center p-3">
           <DataTable
@@ -205,6 +351,7 @@ async function getSaleReport(mode) {
             :rowsPerPageOptions="[10, 20, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           >
+            <Button icon="pi pi-file" label=" graph" @click="pushchartCust" />
             <template #header>
               <div class="flex justify-content-between align-items-center">
                 <h5 class="m-0">CustCode</h5>
@@ -237,6 +384,11 @@ async function getSaleReport(mode) {
             :rowsPerPageOptions="[10, 20, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           >
+            <Button
+              icon="pi pi-file"
+              label=" Warehouse"
+              @click="pushchartWhData"
+            />
             <template #header>
               <div class="flex justify-content-between align-items-center">
                 <h5 class="m-0">Warehouse</h5>
@@ -269,6 +421,11 @@ async function getSaleReport(mode) {
             :rowsPerPageOptions="[10, 20, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           >
+            <Button
+              icon="pi pi-file"
+              label=" warehouseshelf"
+              @click="pushchartWhshelfData"
+            />
             <template #header>
               <div class="flex justify-content-between align-items-center">
                 <h5 class="m-0">warehouseshelf</h5>
@@ -302,6 +459,7 @@ async function getSaleReport(mode) {
             :rowsPerPageOptions="[10, 20, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           >
+            <Button icon="pi pi-file" label=" DocType" @click="pushDocType" />
             <template #header>
               <div class="flex justify-content-between align-items-center">
                 <h5 class="m-0">DocType</h5>
@@ -337,6 +495,11 @@ async function getSaleReport(mode) {
             :rowsPerPageOptions="[10, 20, 50]"
             currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
           >
+            <Button
+              icon="pi pi-file"
+              label=" Doctypechart"
+              @click="pushchartCust"
+            />
             <template #header>
               <div class="flex justify-content-between align-items-center">
                 <h5 class="m-0">ItemCode</h5>
