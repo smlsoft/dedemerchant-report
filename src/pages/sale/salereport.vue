@@ -20,8 +20,8 @@ const isvisible = ref(false);
 const showdia = ref(false);
 const router = useRouter();
 const code_detail = ref("");
-// const fromdate = ref("");
-// const todate = ref("");
+const Fromdate = ref("");
+const Todate = ref("");
 const storeApp = useApp();
 const storeLang = useLang();
 const date1 = ref();
@@ -201,18 +201,17 @@ function getDateFromYear(date) {
 }
 
 function getBalanceReport() {
-  // let fromdate = getDateFromYear(fromdate);
-  // let todate = getDateFromYear(todate);
+  let fromdate = getDateFromYear(Fromdate.value);
+  let todate = getDateFromYear(Todate.value);
   ReportService.getSaleReport(
     (fromdate = "2022-01-02"),
-    (todate = "2022-01-02")
+    (todate = "2022-02-02")
   )
     .then((res) => {
       console.log(res);
       if (res.success) {
-        products.value = res.data;
-
-        loading.value = false;
+        // products.value = res.data;
+        // loading.value = false;
       }
     })
     .catch((err) => {
