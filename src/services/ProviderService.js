@@ -17,7 +17,7 @@ const instanceApireport = () => {
   //console.log("API URL : ", process.env.VUE_APP_API);
 
   const http = axios.create({ baseURL: process.env.VUE_APP_REPORT_API_URL });
-  console.log(process.env);
+  //console.log(process.env);
   http.defaults.headers.common["Content-Type"] = "application/json";
   //   if (authentication) {
   //     http.defaults.headers.common["Authorization"] =

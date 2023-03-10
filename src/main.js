@@ -41,6 +41,7 @@ import Splitter from 'primevue/splitter';
 import SplitterPanel from 'primevue/splitterPanel';
 import Divider from 'primevue/divider'
 import Skeleton from 'primevue/skeleton'
+import Chart from 'primevue/chart';
 
 import 'primevue/resources/themes/saga-blue/theme.css'
 import 'primevue/resources/primevue.min.css'
@@ -52,7 +53,7 @@ const app = createApp(App)
 app.use(PrimeVue);
 app.use(router);
 app.use(ToastService);
-
+app.component('Chart', Chart);
 app.component('Skeleton', Skeleton);
 app.component('Divider', Divider);
 app.component('SplitterPanel', SplitterPanel);
