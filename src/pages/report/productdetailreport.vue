@@ -12,7 +12,6 @@ import { useLang } from "@/stores/lang.js";
 import { useRouter } from "vue-router";
 import pdfMake from "pdfmake/build/pdfmake.js";
 import pdfFonts from "pdfmake/build/vfs_fonts.js";
-import Calendar from "primevue/calendar";
 import Chart from "primevue/chart";
 import $ from "jquery";
 pdfMake.vfs = pdfFonts.pdfMake.vfs;
@@ -20,16 +19,13 @@ const isvisible = ref(false);
 const showdia = ref(false);
 const router = useRouter();
 const code_detail = ref("");
-const Fromdate = ref("");
-const Todate = ref("");
 const storeApp = useApp();
 const storeLang = useLang();
-const date1 = ref();
 const toast = useToast();
 const email = ref("");
 const products = ref(null);
 const chartData = ref(null);
-const location = ref("");
+const Keyword = ref("");
 const chartOptions = {
   plugins: {
     legend: {
@@ -82,11 +78,10 @@ statuses: [
 ];
 
 onMounted(() => {
-  storeApp.setPageTitle("รายงานสินค้า");
-  storeApp.setActivePage("productreport");
+  storeApp.setPageTitle("รายงานรายละอียดสินค้า");
+  storeApp.setActivePage("productdetailReport");
   storeApp.setActiveChild("");
   checkActiveLang();
-  // getBalanceReport();
 });
 
 function createPDFData(products) {
@@ -188,26 +183,14 @@ function generatePDF() {
     iframe.src = dataUrl;
   });
 }
-function getDateFromYear(date) {
-  var d = new Date(date),
-    month = "" + (d.getMonth() + 1),
-    day = "" + d.getDate(),
-    year = d.getFullYear();
 
-  if (month.length < 2) month = "0" + month;
-  if (day.length < 2) day = "0" + day;
-
-  return [year, month, day].join("-");
-}
-
-function getproductreport() {
-  //   let fromdate = getDateFromYear(Fromdate.value);
-  //   let todate = getDateFromYear(Todate.value);
-  ReportService.getproductreport()
+function getproductdetail() {
+  ReportService.getproductdetail(Keyword.value)
     .then((res) => {
       console.log(res);
       if (res.success) {
         products.value = res.data;
+
         loading.value = false;
       }
     })
@@ -296,15 +279,7 @@ function sendPDF() {
       });
   }
 }
-function findUnitname(data) {
-  console.log(data.names[0].name);
-  return data.names[0].name;
-  //   if ((result.length = 0)) {
-  //     return result[0].name;
-  //   } else {
-  //     return "";
-  //   }
-}
+
 function onClose() {
   showdia.value = false;
 }
@@ -322,47 +297,34 @@ function goTo(path, param) {
     <MainContentWarp id="mainDiv">
       <div class="grid mt-2">
         <div class="col-12">
-          <div class="fieldcol-6 md:col-3 ml-4">
-            <!-- <Calendar
-              inputId="basic"
-              v-model="Fromdate"
-              autocomplete="off"
-              dateFormat="yy-mm-dd"
-            />
-            <label for="endDate" class="font-medium text-900 ml-6"
-              >ถึงวันที่ :</label
-            >
-            <Calendar
-              inputId="basic"
-              v-model="todate"
-              autocomplete="off"
-              dateFormat="yy-mm-dd"
-            /> -->
-          </div>
+          <InputText type="text" v-model="email" />
+          <InputText type="text" v-model="Keyword" />
           <Button
             icon="pi pi-file"
-            label=" graph"
-            @click="getproductreport()"
+            label=" ค้นหา"
+            @click="getproductdetail()"
           />
 
           <Card>
             <template #title>
               {{ storeApp.PageTitle }}
             </template>
+
             <template #content>
               <DataTable
                 :value="products"
                 :paginator="true"
-                class="p-datatable-sm"
+                class="p-datatable-products"
                 :rows="25"
                 :rowHover="true"
                 v-model:filters="filters"
                 filterDisplay="menu"
                 :loading="loading"
+                paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
+                :rowsPerPageOptions="[10, 25, 50]"
+                currentPageReportTemplate="จาก {first} ถึง {last} ทั้งหมด {totalRecords} รายการ"
                 responsiveLayout="scroll"
-                paginatorTemplate="CurrentPageReport FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink RowsPerPageDropdown"
-                :rowsPerPageOptions="[10, 20, 50]"
-                currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+                stripedRows
               >
                 <template #header>
                   <div class="flex justify-content-between align-items-center">
@@ -372,6 +334,8 @@ function goTo(path, param) {
                       label="Preview PDF"
                       @click="generatePDF"
                     />
+                    <Button icon="pi pi-file" label=" graph" @click="push" />
+                    <InputText type="text" v-model="email" />
 
                     <span class="p-input-icon-left">
                       <i class="pi pi-search" />
@@ -384,24 +348,46 @@ function goTo(path, param) {
                 </template>
                 <template #empty> ไม่พบข้อมูล </template>
                 <template #loading> กำลังโหลดข้อมูลกรุณารอซักครู่ </template>
-                <Column field="groupcode" header="กลุ่มสินค้า"></Column>
-                <Column field="itemcode" header="รหัส"> </Column>
-                <Column field="names" header=" ชื่อ">
+                <Column
+                  field="code"
+                  header="รหัสสินค้า"
+                  style="width: 10%"
+                ></Column>
+                <Column field="itemname" header="ชื่อสินค้า" style="width: 30%">
+                </Column>
+                <Column
+                  field="unitcost"
+                  header="หน่วยนับต้นทุน"
+                  style="width: 10%"
+                >
+                </Column>
+                <Column
+                  field="unitstandard"
+                  header="หน่วยนับต้นทุน"
+                  style="width: 10%"
+                >
+                </Column>
+                <Column
+                  field="producttype"
+                  header="หน่วยนับมาตราฐาน"
+                  style="width: 10%"
+                >
+                </Column>
+
+                <Column
+                  field="taxtype"
+                  header="ประเภทสินค้า"
+                  sortble
+                  style="width: 10%"
+                >
                   <template #body="{ data }">
-                    {{ data.names[0].name }}
+                    {{ Utils.formatCurrency(data.qty_in) }}
                   </template>
                 </Column>
-                <Column field="unitcost" header="หน่วยนับ"> </Column>
-
-                <Column field="warehouse" header="คลัง"> </Column>
-                <Column field="location" header="ที่เก็บ"> </Column>
               </DataTable>
             </template>
           </Card>
           <div class="col-12">
-            <div class="col-6">
-              <Chart type="bar" :data="chartData" :options="chartOptions" />
-            </div>
             <!-- <div class="col-6">
               <Chart
                 type="polarArea"

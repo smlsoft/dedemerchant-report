@@ -18,21 +18,54 @@ export default [
     },
     component: () => import("../pages/Dashboard.vue"),
   },
+  //Report Start
   {
-    path: "/inventory/balance",
+    path: "/report/balance",
     name: "balance",
-    component: () => import("../pages/inventory/balance.vue"),
+    component: () => import("../pages/report/balance.vue"),
   },
   {
-    path: "/sale/salereport",
+    path: "/report/salereport",
     name: "salereport",
-    component: () => import("../pages/sale/salereport.vue"),
+    component: () => import("../pages/report/salereport.vue"),
   },
   {
-    path: "/sale/product",
+    path: "/report/product",
     name: "product",
-    component: () => import("../pages/sale/product.vue"),
+    component: () => import("../pages/report/product.vue"),
   },
+  {
+    path: "/report/productdetailreport",
+    name: "productdetailreport",
+    component: () => import("../pages/report/productdetailreport.vue"),
+  },
+  {
+    path: "/report/productdetailgroupreport",
+    name: "productdetailgroupreport",
+    component: () => import("../pages/report/productdetailgroupreport.vue"),
+  },
+  {
+    path: "/report/productdetailCatrgoryReport",
+    name: "productdetailCatrgoryReport",
+    component: () => import("../pages/report/productdetailcatrgoryreport.vue"),
+  },
+
+  {
+    path: "/report/productbarcodereport",
+    name: "productbarcodereport",
+    component: () => import("../pages/report/productbarcodereport.vue"),
+  },
+  {
+    path: "/report/productsalebarcodereport",
+    name: "productsalebarcodereport",
+    component: () => import("../pages/report/productsalebarcodereport.vue"),
+  },
+  {
+    path: "/report/productsalepricereport",
+    name: "productsalepricereport",
+    component: () => import("../pages/report/productsalepricereport.vue"),
+  },
+  //Report end
   {
     path: "/login",
     name: "login",

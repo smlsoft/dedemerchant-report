@@ -6,6 +6,8 @@ import { useApp } from "@/stores/app.js";
 import ReportService from "@/services/ReportService";
 import { FilterMatchMode, FilterOperator } from "primevue/api";
 import Chart from "primevue/chart";
+import AutoComplete from "primevue/autocomplete";
+
 import DynamicDialog from "primevue/dynamicdialog";
 const storeApp = useApp();
 const charCusttData = ref(null);
@@ -14,6 +16,7 @@ const chartWhshelfData = ref(null);
 const chartWhData = ref(null);
 const chartDoctyp = ref(null);
 const chartItem = ref();
+const filteredCountries = ref();
 const chartCust = ref();
 const chartWhshelf = ref();
 const chartWh = ref();
@@ -298,6 +301,9 @@ async function getSaleReport(mode) {
     });
 
   return result;
+}
+function search() {
+  console.log(`Searching for customer with code ${custcode}`);
 }
 </script>
 
@@ -721,7 +727,17 @@ async function getSaleReport(mode) {
           </div>
           <div class="field col-12 md:col-3">
             <span class="p-float-label">
+              <!-- <InputText type="text" v-model="custcode" /> -->
               <InputText type="text" v-model="custcode" />
+              <!-- <Dropdown
+                v-model="custcode"
+                :options="chartCust"
+                optionLabel="custcode"
+                optionValue="custcode"
+                placeholder="Select a City"
+                class="w-full md:w-14rem"
+                :editable="true"
+              /> -->
               <label>custcode</label>
             </span>
           </div>

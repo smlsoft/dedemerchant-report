@@ -25,7 +25,7 @@ const toast = useToast();
 const email = ref("");
 const products = ref(null);
 const chartData = ref(null);
-const location = ref("");
+const Keyword = ref("");
 const chartOptions = {
   plugins: {
     legend: {
@@ -78,11 +78,10 @@ statuses: [
 ];
 
 onMounted(() => {
-  storeApp.setPageTitle("รายงานสินค้าคงเหลือ");
-  storeApp.setActivePage("balance");
+  storeApp.setPageTitle("รายงานบาร์โค๊ดสินค้า");
+  storeApp.setActivePage("productbarcodereport");
   storeApp.setActiveChild("");
   checkActiveLang();
-  getBalanceReport();
 });
 
 function createPDFData(products) {
@@ -185,8 +184,8 @@ function generatePDF() {
   });
 }
 
-function getBalanceReport() {
-  ReportService.getBalanceReport()
+function getproductdetail() {
+  ReportService.getproductdetailbarcode(Keyword.value)
     .then((res) => {
       console.log(res);
       if (res.success) {
@@ -299,10 +298,18 @@ function goTo(path, param) {
       <div class="grid mt-2">
         <div class="col-12">
           <InputText type="text" v-model="email" />
+          <InputText type="text" v-model="Keyword" />
+          <Button
+            icon="pi pi-file"
+            label=" ค้นหา"
+            @click="getproductdetail()"
+          />
+
           <Card>
             <template #title>
               {{ storeApp.PageTitle }}
             </template>
+
             <template #content>
               <DataTable
                 :value="products"
@@ -327,6 +334,8 @@ function goTo(path, param) {
                       @click="generatePDF"
                     />
                     <Button icon="pi pi-file" label=" graph" @click="push" />
+                    <InputText type="text" v-model="email" />
+
                     <span class="p-input-icon-left">
                       <i class="pi pi-search" />
                       <InputText
@@ -338,35 +347,21 @@ function goTo(path, param) {
                 </template>
                 <template #empty> ไม่พบข้อมูล </template>
                 <template #loading> กำลังโหลดข้อมูลกรุณารอซักครู่ </template>
-                <Column field="shopid" header="shopid" sortable></Column>
-                <Column field="ic_code" header="รหัส" sortable> </Column>
-                <Column field="ic_name" header="ชื่อ" sortable> </Column>
-                <Column field="ic_unit_code" header="หน่วยนับ" sortable>
-                </Column>
-                <Column field="warehouse" header="คลัง" sortable> </Column>
-                <Column field="location" header="ที่เก็บ" sortable> </Column>
-                <Column field="qty_in" header="QTY In" sortable>
+                <Column field="barcode" header="บา์โค๊ด" sortable></Column>
+                <Column field="itemname" header="ชื่อสินค้า" sortable> </Column>
+                <Column field="iccode" header="รหัสสินค้า" sortable> </Column>
+
+                <Column field="unitcode" header="หน่วยนับ" sortable> </Column>
+                <Column field="price" header="ราคาขาย" sortable> </Column>
+                <Column field="ราคาสมาชิก" header="pricemember" sortable>
                   <template #body="{ data }">
                     {{ Utils.formatCurrency(data.qty_in) }}
-                  </template>
-                </Column>
-                <Column field="qty_out" header="QTY Out" sortable>
-                  <template #body="{ data }">
-                    {{ Utils.formatCurrency(data.qty_out) }}
-                  </template>
-                </Column>
-                <Column field="balance_qty" header="Balance" sortable>
-                  <template #body="{ data }">
-                    {{ Utils.formatCurrency(data.balance_qty) }}
                   </template>
                 </Column>
               </DataTable>
             </template>
           </Card>
           <div class="col-12">
-            <div class="col-6">
-              <Chart type="bar" :data="chartData" :options="chartOptions" />
-            </div>
             <!-- <div class="col-6">
               <Chart
                 type="polarArea"
